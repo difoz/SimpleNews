@@ -62,6 +62,7 @@ public class WeatherFragment extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment_weather, null);
         FloatingActionButton floatbtn = (FloatingActionButton) view.findViewById(R.id.weaFrag_floatBtn);
+        config = getActivity().getSharedPreferences("config", Context.MODE_PRIVATE);
         //浮动按钮的点击监听
         floatbtn.setOnClickListener(new View.OnClickListener()
         {
@@ -80,6 +81,7 @@ public class WeatherFragment extends Fragment
         if (bundle != null)
         {
             url_for_swiperefresh = bundle.getString("Data");
+            config.edit().putString("Data", url_for_swiperefresh).commit();
         }
 
         /**
@@ -94,6 +96,7 @@ public class WeatherFragment extends Fragment
             @Override
             public void onRefresh()
             {
+                url_for_swiperefresh = config.getString("Data", "");
                 RequestLocalWeather(url_for_swiperefresh);
             }
         });
@@ -110,6 +113,8 @@ public class WeatherFragment extends Fragment
         forcast_head = (LinearLayout) view.findViewById(R.id.main_forcast_list);
         overall_weather = (TextView) view.findViewById(R.id.main_overall_weather);
         //image = (ImageView) view.findViewById(R.id.bing_pic);
+        String data = config.getString("Data", "");
+        RequestLocalWeather(data);
 
         return view;
     }
